@@ -19,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
     {"icon": Icons.library_music, "title": "Library"},
     {"icon": Icons.person, "title": "Premium"},
   ];
-  List tabs = const [Home(), SearchPage(), LibraryPage(), PremiumPage()];
+  List tabs = [Home(), SearchPage(), LibraryPage(), PremiumPage()];
   int currentindex = 0;
   @override
   Widget build(BuildContext context) {

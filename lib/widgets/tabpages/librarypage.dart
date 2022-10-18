@@ -1,11 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
-class LibraryPage extends StatelessWidget {
+class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
 
+  @override
+  State<LibraryPage> createState() => _LibraryPageState();
+}
+
+class _LibraryPageState extends State<LibraryPage> {
+  bool isListViewEnabled = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,8 +19,8 @@ class LibraryPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: CircleAvatar(
-            backgroundImage: NetworkImage(
+        leading: const CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(
                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
         title: Text(
           "Your Library",
@@ -92,7 +98,7 @@ class LibraryPage extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.01),
-                        child: Icon(
+                        child: const Icon(
                           Icons.swap_vert,
                           color: Colors.white,
                         ),
@@ -107,17 +113,94 @@ class LibraryPage extends StatelessWidget {
                     ],
                   ),
                   IconButton(
-                      onPressed: (() {}),
+                      onPressed: (() {
+                        setState(() {
+                          isListViewEnabled = !isListViewEnabled;
+                        });
+                      }),
                       icon: Icon(
-                        Icons.grid_view,
+                        isListViewEnabled
+                            ? Icons.table_rows_outlined
+                            : Icons.grid_view,
                         color: Colors.white,
                       ))
                 ],
               ),
             ),
+            isListViewEnabled ? recentAlbumListview() : recentAlbumGridView(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.08,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Widget recentAlbumListview() {
+    return ListView.builder(
+      itemCount: 30,
+      shrinkWrap: true,
+      physics: const ScrollPhysics(),
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.01),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width * 0.1,
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(5)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.05),
+                    child: Text(
+                      "Album name",
+                      overflow: TextOverflow.fade,
+                      maxLines: 2,
+                      style: GoogleFonts.poppins(
+                          fontSize: MediaQuery.of(context).size.width * 0.04,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget recentAlbumGridView() {
+    return GridView.builder(
+        shrinkWrap: true,
+        physics: const ScrollPhysics(),
+        itemCount: 30,
+        scrollDirection: Axis.vertical,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: MediaQuery.of(context).size.width * 0.0025,
+            mainAxisSpacing: MediaQuery.of(context).size.height * 0.01,
+            crossAxisSpacing: MediaQuery.of(context).size.width * 0.03),
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.red, borderRadius: BorderRadius.circular(5)),
+          );
+        });
   }
 }

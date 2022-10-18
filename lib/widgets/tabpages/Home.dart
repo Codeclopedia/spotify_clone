@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotify_clone/service/dataController.dart';
 import 'package:spotify_clone/widgets/homeIcons.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  Home({super.key});
+  dataController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,10 @@ class Home extends StatelessWidget {
             previewStyle1("Your top mixes", context),
             previewStyle1("More of what you like", context),
             previewStyle1("Recently played", context),
-            previewStyle2("Your Favorite Artist", context),
+            previewStyle2(
+              "Your Favorite Artist",
+              context,
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
@@ -58,38 +65,44 @@ class Home extends StatelessWidget {
         shrinkWrap: true,
         itemCount: 6,
         itemBuilder: (context, index) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            width: MediaQuery.of(context).size.width * 0.1,
-            decoration: BoxDecoration(
-                color: Color.fromARGB(127, 58, 58, 58),
-                borderRadius: BorderRadius.circular(5)),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.08,
-                  width: MediaQuery.of(context).size.width * 0.15,
-                  child: Image.network(
-                    "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      "Album name",
-                      overflow: TextOverflow.fade,
-                      maxLines: 2,
-                      style: GoogleFonts.poppins(
-                          fontSize: MediaQuery.of(context).size.width * 0.032,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+          return Obx(() => Container(
+                height: MediaQuery.of(context).size.height * 0.1,
+                width: MediaQuery.of(context).size.width * 0.1,
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(127, 58, 58, 58),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      child: controller.items.isEmpty
+                          ? CircularProgressIndicator()
+                          : CachedNetworkImage(
+                              imageUrl: controller.items[index].images[0].url,
+                              fit: BoxFit.cover,
+                            ),
                     ),
-                  ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.02,
+                    ),
+                    Expanded(
+                      child: Text(
+                        controller.items.isEmpty
+                            ? ""
+                            : controller.items[index].name,
+                        overflow: TextOverflow.fade,
+                        maxLines: 2,
+                        style: GoogleFonts.poppins(
+                            fontSize: MediaQuery.of(context).size.width * 0.032,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
+              ));
         },
       ),
     );
@@ -147,8 +160,9 @@ class Home extends StatelessWidget {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            child: Image.network(
-                              "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg",
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg",
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -210,14 +224,14 @@ class Home extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage(
+                            backgroundImage: const CachedNetworkImageProvider(
                                 "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg"),
                             radius: MediaQuery.of(context).size.width * 0.15,
                           ),
                           Expanded(
                             child: Center(
                               child: Text(
-                                "Album name",
+                                "Albu name",
                                 overflow: TextOverflow.fade,
                                 maxLines: 3,
                                 style: GoogleFonts.poppins(
