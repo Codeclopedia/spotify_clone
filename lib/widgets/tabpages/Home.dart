@@ -4,9 +4,18 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotify_clone/service/dataController.dart';
 import 'package:spotify_clone/widgets/homeIcons.dart';
+import 'package:spotify_clone/widgets/lastalbums.dart';
+import 'package:spotify_clone/widgets/preview_Style2.dart';
+import 'package:spotify_clone/widgets/previewstyle1.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   dataController controller = Get.find();
 
   @override
@@ -34,14 +43,16 @@ class Home extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
             ),
-            firstrow(context),
+            const LastAlbum(),
             recentAlbums(context),
-            previewStyle1("Your top mixes", context),
-            previewStyle1("More of what you like", context),
-            previewStyle1("Recently played", context),
-            previewStyle2(
-              "Your Favorite Artist",
-              context,
+            PreviewStyle1(
+                headingTitle: "Your top mixes", data: controller.items),
+            PreviewStyle1(
+                headingTitle: "More of what you like", data: controller.items),
+            PreviewStyle1(
+                headingTitle: "Recently played", data: controller.items),
+            const PreviewStyle2(
+              headingTitle: "Your Favorite Artist",
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
@@ -105,154 +116,6 @@ class Home extends StatelessWidget {
               ));
         },
       ),
-    );
-  }
-
-  Widget firstrow(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("Good morning",
-            style: GoogleFonts.poppins(
-                fontSize: MediaQuery.of(context).size.width * 0.065,
-                fontWeight: FontWeight.bold,
-                color: Colors.white)),
-        Row(
-          children: const [
-            HomeIcons(icon: Icons.notifications_outlined, color: Colors.white),
-            HomeIcons(icon: Icons.timer_outlined, color: Colors.white),
-            HomeIcons(icon: Icons.settings_outlined, color: Colors.white)
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget previewStyle1(String headingTitle, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(headingTitle,
-            style: GoogleFonts.poppins(
-                fontSize: MediaQuery.of(context).size.width * 0.06,
-                fontWeight: FontWeight.bold,
-                color: Colors.white)),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.02),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.02),
-                  child: Center(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                "Album name",
-                                overflow: TextOverflow.fade,
-                                maxLines: 3,
-                                style: GoogleFonts.poppins(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.025,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget previewStyle2(String headingTitle, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(headingTitle,
-            style: GoogleFonts.poppins(
-                fontSize: MediaQuery.of(context).size.width * 0.06,
-                fontWeight: FontWeight.bold,
-                color: Colors.white)),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.02),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.02),
-                  child: Center(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: const CachedNetworkImageProvider(
-                                "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg"),
-                            radius: MediaQuery.of(context).size.width * 0.15,
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                "Albu name",
-                                overflow: TextOverflow.fade,
-                                maxLines: 3,
-                                style: GoogleFonts.poppins(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.025,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
