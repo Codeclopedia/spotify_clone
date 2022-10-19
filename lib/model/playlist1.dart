@@ -193,7 +193,7 @@ class Owner {
   String href;
   Id? id;
   OwnerType? type;
-  Uri? uri;
+  Uri1? uri;
 
   factory Owner.fromJson(Map<String, dynamic> json) => Owner(
         displayName: displayNameValues.map[json["display_name"]],
@@ -226,10 +226,10 @@ enum OwnerType { USER }
 
 final ownerTypeValues = EnumValues({"user": OwnerType.USER});
 
-enum Uri { SPOTIFY_USER_SPOTIFY }
+enum Uri1 { SPOTIFY_USER_SPOTIFY }
 
 final uriValues =
-    EnumValues({"spotify:user:spotify": Uri.SPOTIFY_USER_SPOTIFY});
+    EnumValues({"spotify:user:spotify": Uri1.SPOTIFY_USER_SPOTIFY});
 
 class Tracks {
   Tracks({

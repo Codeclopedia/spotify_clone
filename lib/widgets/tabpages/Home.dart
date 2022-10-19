@@ -44,10 +44,12 @@ class Home extends StatelessWidget {
             // PreviewStyle1(
             //     headingTitle: "Albums",
             //     data: controller.playlistdata?.playlists.items),
-            PreviewStyle1(
-                headingTitle: "Recently played", data: controller.items),
-            const PreviewStyle2(
+            // PreviewStyle1(
+            //     headingTitle: "Recently played",
+            //     data: controller.recentlyPlayed5data),
+            PreviewStyle2(
               headingTitle: "Your Favorite Artist",
+              data: controller.items,
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,

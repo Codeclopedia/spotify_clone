@@ -50,14 +50,16 @@ class PreviewStyle1 extends StatelessWidget {
                                     width:
                                         MediaQuery.of(context).size.width * 0.3,
                                     child: CachedNetworkImage(
-                                      imageUrl: data[index].images[0].url,
+                                      imageUrl: data[index].images[0].url ??
+                                          data[index].track.album.images[0].url,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                   Expanded(
                                     child: Center(
                                       child: Text(
-                                        data[index].name,
+                                        data[index].name ??
+                                            data[index].track.name,
                                         overflow: TextOverflow.fade,
                                         maxLines: 3,
                                         style: GoogleFonts.poppins(
