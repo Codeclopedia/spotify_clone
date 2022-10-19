@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,14 +7,9 @@ import 'package:spotify_clone/widgets/lastalbums.dart';
 import 'package:spotify_clone/widgets/preview_Style2.dart';
 import 'package:spotify_clone/widgets/previewstyle1.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   Home({super.key});
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
   dataController controller = Get.find();
 
   @override
@@ -47,8 +41,9 @@ class _HomeState extends State<Home> {
             LastAlbum(),
             PreviewStyle1(
                 headingTitle: "Your top mixes", data: controller.items),
-            PreviewStyle1(
-                headingTitle: "More of what you like", data: controller.items),
+            // PreviewStyle1(
+            //     headingTitle: "Albums",
+            //     data: controller.playlistdata?.playlists.items),
             PreviewStyle1(
                 headingTitle: "Recently played", data: controller.items),
             const PreviewStyle2(

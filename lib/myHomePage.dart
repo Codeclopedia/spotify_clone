@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:spotify_clone/widgets/customBarIcons.dart';
 import 'package:spotify_clone/widgets/tabpages/Home.dart';
@@ -19,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
     {"icon": Icons.library_music, "title": "Library"},
     {"icon": Icons.person, "title": "Premium"},
   ];
-  List tabs = [Home(), SearchPage(), LibraryPage(), PremiumPage()];
+  List tabs = [Home(), SearchPage(), const LibraryPage(), const PremiumPage()];
   int currentindex = 0;
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotify_clone/service/dataController.dart';
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+  SearchPage({super.key});
+  dataController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +33,13 @@ class SearchPage extends StatelessWidget {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5)),
                       child: TextFormField(
+                        textAlign: TextAlign.left,
                         decoration: InputDecoration(
                             hintText: "What do you want to listen to?",
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.01),
+                            contentPadding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.02,
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.022),
                             floatingLabelAlignment:
                                 FloatingLabelAlignment.center,
                             hintStyle: TextStyle(
@@ -87,14 +93,35 @@ class SearchPage extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return Container(
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(5)),
+                      decoration:
+                          BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                      child: Stack(children: [
+                        CachedNetworkImage(
+                            imageUrl: controller.categories.categories
+                                .items[index].icons[0].url),
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.height * 00.001,
+                          left: MediaQuery.of(context).size.width * 00.01,
+                          child: Text(
+                            controller.categories.categories.items[index].name,
+                            style: GoogleFonts.poppins(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.035,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        )
+                      ]),
                     );
                   },
-                  childCount: 30,
+                  childCount: controller.categories.categories.items.length,
                 ),
-              ) //SliverList
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                ),
+              ), //SliverList
             ], //<Widget>[]
           ),
         ),

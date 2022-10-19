@@ -2,21 +2,23 @@
 //
 //     final categories = categoriesFromJson(jsonString);
 
+// ignore_for_file: constant_identifier_names, file_names, duplicate_ignore, unnecessary_new, prefer_conditional_assignment
+
 import 'dart:convert';
 
-Categories categoriesFromJson(String str) =>
-    Categories.fromJson(json.decode(str));
+Categories1 categoriesFromJson(String str) =>
+    Categories1.fromJson(json.decode(str));
 
-String categoriesToJson(Categories data) => json.encode(data.toJson());
+String categoriesToJson(Categories1 data) => json.encode(data.toJson());
 
-class Categories {
-  Categories({
+class Categories1 {
+  Categories1({
     required this.albums,
   });
 
   Albums albums;
 
-  factory Categories.fromJson(Map<String, dynamic> json) => Categories(
+  factory Categories1.fromJson(Map<String, dynamic> json) => Categories1(
         albums: Albums.fromJson(json["albums"]),
       );
 
@@ -37,7 +39,7 @@ class Albums {
   });
 
   String href;
-  List<Item> items;
+  List<Item1> items;
   int limit;
   String next;
   int offset;
@@ -46,7 +48,7 @@ class Albums {
 
   factory Albums.fromJson(Map<String, dynamic> json) => Albums(
         href: json["href"],
-        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+        items: List<Item1>.from(json["items"].map((x) => Item1.fromJson(x))),
         limit: json["limit"],
         next: json["next"],
         offset: json["offset"],
@@ -65,8 +67,8 @@ class Albums {
       };
 }
 
-class Item {
-  Item({
+class Item1 {
+  Item1({
     required this.albumType,
     required this.artists,
     required this.availableMarkets,
@@ -96,7 +98,7 @@ class Item {
   AlbumTypeEnum? type;
   String uri;
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory Item1.fromJson(Map<String, dynamic> json) => Item1(
         albumType: albumTypeEnumValues.map[json["album_type"]],
         artists:
             List<Artist>.from(json["artists"].map((x) => Artist.fromJson(x))),
@@ -134,6 +136,7 @@ class Item {
       };
 }
 
+// ignore: constant_identifier_names
 enum AlbumTypeEnum { SINGLE, ALBUM }
 
 final albumTypeEnumValues =
