@@ -31,17 +31,8 @@ class PreviewStyle2 extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
                         itemCount: data.length,
+                        cacheExtent: 20,
                         itemBuilder: (context, index) {
-                          var artistImageUrl;
-                          controller
-                              .getIdArtistImage(data[index].artists[0].id)
-                              .then(
-                            (value) async {
-                              artistImageUrl = await value;
-                              print(artistImageUrl);
-                            },
-                          );
-
                           return Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal:
@@ -54,14 +45,23 @@ class PreviewStyle2 extends StatelessWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    // CircleAvatar(
-                                    //   backgroundImage:
-                                    //       CachedNetworkImageProvider(
-                                    //           artistImageUrl),
-                                    //   radius:
-                                    //       MediaQuery.of(context).size.width *
-                                    //           0.15,
-                                    // ),
+                                    FutureBuilder<String>(
+                                        future: controller.getIdArtistImage(
+                                            data[index].artists[0].id),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return CircleAvatar(
+                                              backgroundImage:
+                                                  CachedNetworkImageProvider(
+                                                      snapshot.data!),
+                                              radius: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.15,
+                                            );
+                                          }
+                                          return CircularProgressIndicator();
+                                        }),
                                     Expanded(
                                       child: Center(
                                         child: Text(

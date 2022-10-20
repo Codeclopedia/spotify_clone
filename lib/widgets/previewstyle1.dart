@@ -51,7 +51,7 @@ class PreviewStyle1 extends StatelessWidget {
                                         MediaQuery.of(context).size.width * 0.3,
                                     child: CachedNetworkImage(
                                       imageUrl: data[index].images[0].url ??
-                                          data[index].track.album.images[0].url,
+                                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                                       fit: BoxFit.cover,
                                     ),
                                   ),

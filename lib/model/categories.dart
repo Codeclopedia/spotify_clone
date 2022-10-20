@@ -27,6 +27,10 @@ class BrowseCategories {
   Map<String, dynamic> toJson() => {
         "categories": categories.toJson(),
       };
+
+  factory BrowseCategories.empty() {
+    return BrowseCategories(categories: Categories2.empty());
+  }
 }
 
 class Categories2 {
@@ -67,6 +71,17 @@ class Categories2 {
         "previous": previous,
         "total": total,
       };
+
+  factory Categories2.empty() {
+    return Categories2(
+        href: "",
+        items: [],
+        limit: 0,
+        next: "",
+        offset: 0,
+        previous: null,
+        total: 0);
+  }
 }
 
 class Item2 {
@@ -95,6 +110,9 @@ class Item2 {
         "id": id,
         "name": name,
       };
+  factory Item2.empty() {
+    return Item2(href: "", icons: [], id: "", name: "");
+  }
 }
 
 class Icon {
@@ -109,14 +127,18 @@ class Icon {
   int width;
 
   factory Icon.fromJson(Map<String, dynamic> json) => Icon(
-        height: json["height"] == null ? null : json["height"],
-        url: json["url"],
-        width: json["width"] == null ? null : json["width"],
+        height: json["height"] ?? 0,
+        url: json["url"]?? "",
+        width: json["width"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
-        "height": height == null ? null : height,
+        "height": height == null ? 0 : height,
         "url": url,
-        "width": width == null ? null : width,
+        "width": width == null ? 0 : width,
       };
+
+  factory Icon.empty() {
+    return Icon(height: 0, url: "", width: 0);
+  }
 }

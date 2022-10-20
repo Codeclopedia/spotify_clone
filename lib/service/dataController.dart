@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, depend_on_referenced_packages, camel_case_types, avoid_function_literals_in_foreach_calls
 
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotify_clone/model/artist_info.dart';
@@ -14,10 +16,10 @@ class dataController extends GetxController {
   // Playlists? playlistdata;
   RxList<Item1> items = <Item1>[].obs;
   RxList<Item5>? recentlyPlayed5data = <Item5>[].obs;
-  late BrowseCategories categories;
+   Rx<BrowseCategories> categories = BrowseCategories.empty().obs;
 
   String token =
-      "BQDPRzbbqbHOn7KumPAzqu_v5AexJqQ4b1x3CJYiKlBFaomcVIiuxZh1CqMQp_aSZT83yUmcYdqsBHInweW6mfdp2F7FR3BvDz3kv4ieT6CQn-NeKZ1Pc6FyKSsq_kQ60twHIL98ILgnMxhrS3wpy9_xTX6Yb3xS69P4BhDWHx9ftQyYbhwj2PPF48dew1bhx2w";
+      "BQDiNFBwJBYdEJC8tWjn5Sep34zGoOPF53H-HUw6i7Yy6cZdyFRtcAU366pKw2FRwnGgKMTDVYTx3F16HBEvjcQ6TfY-yF0FgWXlumm1SI983fqCfeMlDLgwD6PlU2VpkgCHBE5jF2ISyUh_I4hrfzvzGiO1Eze5-l5tmpxaj79SxCo61gZL44Sz1ZGSf7VXDHbAnagc";
 
   Future datarequest() async {
     var headers = {'Authorization': 'Bearer $token'};
@@ -53,10 +55,10 @@ class dataController extends GetxController {
     if (response.statusCode == 200) {
       var body = await response.stream.bytesToString();
       ArtistInformation information = artistInformationFromJson(body);
-      print(information.images[0].url);
+
       return information.images[0].url;
     } else {
-      print("error here");
+
       print(response.reasonPhrase);
     }
     return "";
@@ -73,7 +75,7 @@ class dataController extends GetxController {
 
     if (response.statusCode == 200) {
       var body = await response.stream.bytesToString();
-      categories = browseCategoriesFromJson(body);
+      categories.value = browseCategoriesFromJson(body);
     } else {
       print(response.reasonPhrase);
     }
@@ -89,17 +91,18 @@ class dataController extends GetxController {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print("1");
+print("1");
       var body = await response.stream.bytesToString();
-      var data = recentlyPlayedFromJson(body);
+      var data = RecentlyPlayed5.fromJson(jsonDecode(body));
+print("2");
+      print(data);
       data.items.forEach(
         (element) {
           recentlyPlayed5data!.add(element);
-          print(element);
+
         },
       );
-      print(recentlyPlayed5data);
-      print("2");
+
     } else {
       print("error 2");
       print(response.reasonPhrase);
@@ -125,13 +128,17 @@ class dataController extends GetxController {
   //   }
   // }
 
+  getdata()async{
+    await datarequest();
+    await getcategories();
+    await recentlyplayed();
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    // getplaylist();
-    datarequest();
-    getcategories();
-    recentlyplayed();
+
+    getdata();
   }
 }
