@@ -16,10 +16,36 @@ class dataController extends GetxController {
   // Playlists? playlistdata;
   RxList<Item1> items = <Item1>[].obs;
   RxList<Item5>? recentlyPlayed5data = <Item5>[].obs;
-   Rx<BrowseCategories> categories = BrowseCategories.empty().obs;
+  Rx<BrowseCategories> categories = BrowseCategories.empty().obs;
 
   String token =
-      "BQDiNFBwJBYdEJC8tWjn5Sep34zGoOPF53H-HUw6i7Yy6cZdyFRtcAU366pKw2FRwnGgKMTDVYTx3F16HBEvjcQ6TfY-yF0FgWXlumm1SI983fqCfeMlDLgwD6PlU2VpkgCHBE5jF2ISyUh_I4hrfzvzGiO1Eze5-l5tmpxaj79SxCo61gZL44Sz1ZGSf7VXDHbAnagc";
+      "BQBhFOyGShDRtijGl4RR4YZaRN83FVCZIu8Si5LLvOU0iAPZXeDLK4r4JJ_Q6Ri2ZebPYtAinwaQleTpFluloDn0Oe0GXBQB-Y92JGesT4VwJk-h4-Ou25rBHGtaYVdg1nZ4gvEzWVxUG31phDOqSUTVM6AMWQsF5QtaFqxNSYs9gzY9Bre2qWH-EEGfTpwNgXM";
+
+  Future getLibraryDataModel(String linktype) async {
+    var headers = {
+      'Authorization':
+          'Bearer BQDXhYyzW2h7gvb2UnNT2dWm76DJ_ydnGUDBDW-XvkCkMuB8Y63mXObsfkPjq2SDY9e3M-WhNqrq0_ukOEUO4nH07R9pTpOWEtE6AuB5SJQs5PgVOUErajb7Aw5ZxfxwRCcxQPYn8HGv7yXAd9qzt8YixnBDKzqlSQq0wsBnhiWu1S6IPT1iHcAgqJ1Ev5KJf0pUb00ZeT3c3Srs'
+    };
+    var request = http.Request(
+        'GET', Uri.parse('https://api.spotify.com/v1/me/$linktype'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  librarydata() {
+    List data_types = ["albums", "episodes", "shows", "tracks"];
+    for (int i = 0; i < data_types.length; i++) {
+      getLibraryDataModel(data_types[i]);
+    }
+  }
 
   Future datarequest() async {
     var headers = {'Authorization': 'Bearer $token'};
@@ -58,7 +84,6 @@ class dataController extends GetxController {
 
       return information.images[0].url;
     } else {
-
       print(response.reasonPhrase);
     }
     return "";
@@ -91,18 +116,15 @@ class dataController extends GetxController {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-print("1");
       var body = await response.stream.bytesToString();
       var data = RecentlyPlayed5.fromJson(jsonDecode(body));
-print("2");
+
       print(data);
       data.items.forEach(
         (element) {
           recentlyPlayed5data!.add(element);
-
         },
       );
-
     } else {
       print("error 2");
       print(response.reasonPhrase);
@@ -128,10 +150,11 @@ print("2");
   //   }
   // }
 
-  getdata()async{
+  getdata() async {
     await datarequest();
     await getcategories();
     await recentlyplayed();
+    await librarydata();
   }
 
   @override

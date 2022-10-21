@@ -60,7 +60,7 @@ class PreviewStyle2 extends StatelessWidget {
                                                   0.15,
                                             );
                                           }
-                                          return CircularProgressIndicator();
+                                          return const CircularProgressIndicator();
                                         }),
                                     Expanded(
                                       child: Center(

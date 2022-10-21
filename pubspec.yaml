@@ -43,6 +43,9 @@ dependencies:
   #getx
   get: ^4.6.5
 
+  #urlLauncher
+  url_launcher: ^6.1.6
+
   #cachedNetworkImage
   cached_network_image: ^3.2.2
 
@@ -71,6 +74,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/lottie/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
