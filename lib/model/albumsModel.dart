@@ -383,7 +383,7 @@ class TracksItem {
         "id": id,
         "is_local": isLocal,
         "name": name,
-        "preview_url": previewUrl == null ? null : previewUrl,
+        "preview_url": previewUrl,
         "track_number": trackNumber,
         "type": itemTypeValues.reverse[type],
         "uri": uri,

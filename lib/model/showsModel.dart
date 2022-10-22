@@ -4,13 +4,13 @@
 
 import 'dart:convert';
 
-TracksModel tracksModelFromJson(String str) =>
-    TracksModel.fromJson(json.decode(str));
+ShowsModel showsModelFromJson(String str) =>
+    ShowsModel.fromJson(json.decode(str));
 
-String tracksModelToJson(TracksModel data) => json.encode(data.toJson());
+String showsModelToJson(ShowsModel data) => json.encode(data.toJson());
 
-class TracksModel {
-  TracksModel({
+class ShowsModel {
+  ShowsModel({
     required this.href,
     required this.items,
     required this.limit,
@@ -28,7 +28,7 @@ class TracksModel {
   dynamic previous;
   int total;
 
-  factory TracksModel.fromJson(Map<String, dynamic> json) => TracksModel(
+  factory ShowsModel.fromJson(Map<String, dynamic> json) => ShowsModel(
         href: json["href"],
         items: List<dynamic>.from(json["items"].map((x) => x)),
         limit: json["limit"],

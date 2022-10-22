@@ -4,11 +4,15 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:spotify_clone/model/albumsModel.dart';
 import 'package:spotify_clone/model/artist_info.dart';
 import 'package:spotify_clone/model/categories.dart';
 import 'package:spotify_clone/model/dataModel.dart';
+import 'package:spotify_clone/model/episodemodel.dart';
 import 'package:spotify_clone/model/playlist1.dart';
 import 'package:spotify_clone/model/recetlyplayed.dart';
+import 'package:spotify_clone/model/showsModel.dart';
+import 'package:spotify_clone/model/tracksModel.dart';
 
 class dataController extends GetxController {
   late Albums data;
@@ -17,31 +21,55 @@ class dataController extends GetxController {
   RxList<Item1> items = <Item1>[].obs;
   RxList<Item5>? recentlyPlayed5data = <Item5>[].obs;
   Rx<BrowseCategories> categories = BrowseCategories.empty().obs;
+  AlbumsModel? albums;
+  TracksModel? tracks;
+  EpisodeModel6? episodes;
+  ShowsModel? shows;
+
+  RxList data_types = ["albums", "episodes", "shows", "tracks"].obs;
 
   String token =
-      "BQBhFOyGShDRtijGl4RR4YZaRN83FVCZIu8Si5LLvOU0iAPZXeDLK4r4JJ_Q6Ri2ZebPYtAinwaQleTpFluloDn0Oe0GXBQB-Y92JGesT4VwJk-h4-Ou25rBHGtaYVdg1nZ4gvEzWVxUG31phDOqSUTVM6AMWQsF5QtaFqxNSYs9gzY9Bre2qWH-EEGfTpwNgXM";
+      "BQARXS5htAn2UV93PYYH127U6T6Drqaw937grkvlLvhKd_Tei5aM1AvFH0gBovzAYeAmOaE1EfOaZ9GPFCLBY8RuLamGztabV3CEGhdbg1_kjHDXP0cE85N-qZIEIuMYTm1iwPcmsiDyXiUsC0_nLNpWzRcjFcmFooo9Segv8Tv__mjX3P8qIUADKXqs3wKo76bftziyymE2UJ-c";
 
-  Future getLibraryDataModel(String linktype) async {
-    var headers = {
-      'Authorization':
-          'Bearer BQDXhYyzW2h7gvb2UnNT2dWm76DJ_ydnGUDBDW-XvkCkMuB8Y63mXObsfkPjq2SDY9e3M-WhNqrq0_ukOEUO4nH07R9pTpOWEtE6AuB5SJQs5PgVOUErajb7Aw5ZxfxwRCcxQPYn8HGv7yXAd9qzt8YixnBDKzqlSQq0wsBnhiWu1S6IPT1iHcAgqJ1Ev5KJf0pUb00ZeT3c3Srs'
-    };
-    var request = http.Request(
-        'GET', Uri.parse('https://api.spotify.com/v1/me/$linktype'));
+  Future getLibraryDataModel(linktype) async {
+    var headers = {'Authorization': 'Bearer $token'};
+    var request = http.Request('GET',
+        Uri.parse('https://api.spotify.com/v1/me/${linktype.toString()}'));
 
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      var body = await response.stream.bytesToString();
+      switch (linktype) {
+        case "albums":
+          {
+            albums = albumsModelFromJson(body);
+          }
+          break;
+        case "tracks":
+          {
+            tracks = tracksModelFromJson(body);
+          }
+          break;
+        case "episodes":
+          {
+            episodes = episodeModelFromJson(body);
+          }
+          break;
+        default:
+          {
+            shows = showsModelFromJson(body);
+          }
+          break;
+      }
     } else {
       print(response.reasonPhrase);
     }
   }
 
   librarydata() {
-    List data_types = ["albums", "episodes", "shows", "tracks"];
     for (int i = 0; i < data_types.length; i++) {
       getLibraryDataModel(data_types[i]);
     }

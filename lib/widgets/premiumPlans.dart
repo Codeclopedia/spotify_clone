@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,7 +14,9 @@ class PremiumPlans extends StatefulWidget {
 
 class _PremiumPlansState extends State<PremiumPlans> {
   bool ontapped = false;
+  Timer? timer;
   planTapped() async {
+    if (!mounted) return;
     setState(() {
       ontapped = true;
     });
@@ -20,6 +24,14 @@ class _PremiumPlansState extends State<PremiumPlans> {
     setState(() {
       ontapped = false;
     });
+    timer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    timer?.cancel();
+    super.dispose();
   }
 
   @override
