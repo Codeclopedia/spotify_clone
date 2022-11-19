@@ -352,23 +352,21 @@ class _LibraryPageState extends State<LibraryPage> {
                       CachedNetworkImage(
                           imageUrl: controller
                               .albums!.items[index].album.images[0].url),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05),
-                          child: Center(
-                            child: Text(
-                              controller.albums!.items[index].album.name,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.fade,
-                              maxLines: 2,
-                              style: GoogleFonts.poppins(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05),
+                        child: Center(
+                          child: Text(
+                            controller.albums!.items[index].album.name,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.fade,
+                            maxLines: 2,
+                            style: GoogleFonts.poppins(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                         ),
                       ),
@@ -400,30 +398,28 @@ class _LibraryPageState extends State<LibraryPage> {
                         imageUrl: controller
                             .tracks!.items[index].track.album.images[0].url,
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05),
-                          child: Center(
-                            child: Text(
-                              controller.tracks!.items[index].track.name,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.fade,
-                              maxLines: 2,
-                              style: GoogleFonts.poppins(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                shadows: [
-                                  const Shadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.black,
-                                    offset: Offset(5.0, 5.0),
-                                  ),
-                                ],
-                              ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05),
+                        child: Center(
+                          child: Text(
+                            controller.tracks!.items[index].track.name,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.fade,
+                            maxLines: 2,
+                            style: GoogleFonts.poppins(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                const Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black,
+                                  offset: Offset(5.0, 5.0),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -456,23 +452,21 @@ class _LibraryPageState extends State<LibraryPage> {
                         imageUrl: controller
                             .episodes!.items[index].episode.album.images[0].url,
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05),
-                          child: Center(
-                            child: Text(
-                              controller.episodes!.items[index].episode.name,
-                              overflow: TextOverflow.fade,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05),
+                        child: Center(
+                          child: Text(
+                            controller.episodes!.items[index].episode.name,
+                            overflow: TextOverflow.fade,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                         ),
                       ),

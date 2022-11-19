@@ -366,7 +366,7 @@ class TracksItem {
         id: json["id"],
         isLocal: json["is_local"],
         name: json["name"],
-        previewUrl: json["preview_url"] == null ? null : json["preview_url"],
+        previewUrl: json["preview_url"] == null ? "" : json["preview_url"],
         trackNumber: json["track_number"],
         type: itemTypeValues.map[json["type"]],
         uri: json["uri"],

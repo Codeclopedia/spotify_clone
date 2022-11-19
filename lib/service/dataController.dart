@@ -28,8 +28,8 @@ class dataController extends GetxController {
 
   RxList data_types = ["albums", "episodes", "shows", "tracks"].obs;
 
-  String token =
-      "BQARXS5htAn2UV93PYYH127U6T6Drqaw937grkvlLvhKd_Tei5aM1AvFH0gBovzAYeAmOaE1EfOaZ9GPFCLBY8RuLamGztabV3CEGhdbg1_kjHDXP0cE85N-qZIEIuMYTm1iwPcmsiDyXiUsC0_nLNpWzRcjFcmFooo9Segv8Tv__mjX3P8qIUADKXqs3wKo76bftziyymE2UJ-c";
+  String token  =
+      "BQBL4trq8F_917FFnl_VH237n47uYtNtJVwvuEMd2uHyKH5dtDsrLwqRiMSvc-vitozmZUR_hZqKrYHoWo8s9NcC28-BifK7u-vX2G2bj73TSjJiyehXGSAJWsN5Zh1BFGtoBbj14f1NcoknzpmG7Tdq06bTIFbdunO0La1cd5f5K6Fzb1vrRqxfqTZpz_ZL2JoYWipIX1PNY8vu";
 
   Future getLibraryDataModel(linktype) async {
     var headers = {'Authorization': 'Bearer $token'};

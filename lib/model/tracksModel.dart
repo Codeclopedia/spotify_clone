@@ -124,7 +124,7 @@ class Track {
         isLocal: json["is_local"],
         name: json["name"],
         popularity: json["popularity"],
-        previewUrl: json["preview_url"] == null ? null : json["preview_url"],
+        previewUrl: json["preview_url"] == null ? "" : json["preview_url"],
         trackNumber: json["track_number"],
         type: trackTypeValues.map[json["type"]],
         uri: json["uri"],

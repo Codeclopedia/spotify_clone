@@ -88,9 +88,9 @@ class PremiumPage extends StatelessWidget {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          final Uri _url = Uri.parse(
+                          final Uri url = Uri.parse(
                               'https://www.spotify.com/in-en/premium/');
-                          await launchUrl(_url);
+                          await launchUrl(url);
                         },
                         style: ButtonStyle(
                             backgroundColor:
@@ -175,7 +175,8 @@ class PremiumPage extends StatelessWidget {
                                       ),
                                       Text(
                                         benifitsofPremiumdata[index],
-                                        style: TextStyle(color: Colors.white),
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
                                     ],
                                   );
