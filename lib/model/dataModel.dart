@@ -40,11 +40,11 @@ class Albums {
 
   String href;
   List<Item1> items;
-  int limit;
+  int? limit;
   String next;
-  int offset;
+  int? offset;
   dynamic previous;
-  int total;
+  int? total;
 
   factory Albums.fromJson(Map<String, dynamic> json) => Albums(
         href: json["href"],

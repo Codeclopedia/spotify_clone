@@ -16,8 +16,8 @@ import 'package:spotify_clone/model/showsModel.dart';
 import 'package:spotify_clone/model/tracksModel.dart';
 
 class dataController extends GetxController {
-  late Albums data;
-  late Categories1 _data;
+  Albums? data;
+  Categories1? _data;
   // Playlists? playlistdata;
   RxList<Item1> items = <Item1>[].obs;
   RxList<Item5>? recentlyPlayed5data = <Item5>[].obs;
@@ -54,7 +54,7 @@ class dataController extends GetxController {
               albums = albumsModelFromJson(body);
               var data = albums;
               sharedPreferencesinstance.setString(
-                  "albumsData", jsonEncode(data));
+                  "albumsData", albumsModelToJson(data!));
             }
             break;
           case "tracks":
@@ -134,36 +134,35 @@ class dataController extends GetxController {
   getalbumofflinedata() async {
     SharedPreferences sharedPreferencesinstance =
         await SharedPreferences.getInstance();
-    var data = sharedPreferencesinstance.getString("albumsdata");
+    var data = await sharedPreferencesinstance.getString("albumsData");
     albums = albumsModelFromJson(data!);
-    print("sharedPreferencesinstance data of albums is $albums");
   }
 
   gettrackofflinedata() async {
     SharedPreferences sharedPreferencesinstance =
         await SharedPreferences.getInstance();
-    var data = sharedPreferencesinstance.getString("tracksdata");
+    var data = sharedPreferencesinstance.getString("tracksData");
+
     tracks = tracksModelFromJson(data!);
-    print("sharedPreferencesinstance data of tracks is $tracks");
   }
 
   getepisodeofflinedata() async {
     SharedPreferences sharedPreferencesinstance =
         await SharedPreferences.getInstance();
-    var data = sharedPreferencesinstance.getString("episodesdata");
+    var data = sharedPreferencesinstance.getString("episodesData");
     episodes = episodesModelFromJson(data!);
-    print("sharedPreferencesinstance data of episodes is $episodes");
   }
 
   getshowsofflinedata() async {
     SharedPreferences sharedPreferencesinstance =
         await SharedPreferences.getInstance();
-    var data = sharedPreferencesinstance.getString("showsdata");
+    var data = sharedPreferencesinstance.getString("showsData");
     shows = showsModelFromJson(data!);
-    print("sharedPreferencesinstance data of shows is $shows");
   }
 
   Future datarequest() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
     var headers = {'Authorization': 'Bearer $token'};
     var request = http.Request(
         'GET', Uri.parse('https://api.spotify.com/v1/browse/new-releases'));
@@ -175,14 +174,26 @@ class dataController extends GetxController {
     if (response.statusCode == 200) {
       var body = await response.stream.bytesToString();
       _data = categoriesFromJson(body);
-      data = _data.albums;
+      data = _data?.albums;
+      sharedPreferencesinstance.setString("dataAlbumsData", jsonEncode(data));
 
-      data.items.forEach((element) {
+      data?.items.forEach((element) {
         items.add(element);
       });
     } else {
-      print(response.reasonPhrase);
+      await Future.delayed(Duration(seconds: 1));
+      data.isNull ? getdataoffline() : null;
     }
+  }
+
+  getdataoffline() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var localdata = sharedPreferencesinstance.getString("dataAlbumsData");
+    data = jsonDecode(localdata!);
+    data?.items.forEach((element) {
+      items.add(element);
+    });
   }
 
   Future<String> getIdArtistImage(String artistId) async {
@@ -242,7 +253,6 @@ class dataController extends GetxController {
         },
       );
     } else {
-      print("error 2");
       print(response.reasonPhrase);
     }
   }
