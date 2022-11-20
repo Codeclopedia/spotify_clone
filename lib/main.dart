@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:spotify_clone/service/dataController.dart';
 import 'package:spotify_clone/splashScreen.dart';
 
-import 'myHomePage.dart';
-
 void main() {
   runApp(MyApp());
 }

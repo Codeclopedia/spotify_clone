@@ -143,7 +143,9 @@ class SearchPage extends StatelessWidget {
                                 .categories.value.categories.items.length,
                           ),
                         )
-                      : Container();
+                      : const SliverToBoxAdapter(
+                          child: Center(
+                              child: CircularProgressIndicator.adaptive()));
                 }),
                 SliverToBoxAdapter(
                   child: SizedBox(

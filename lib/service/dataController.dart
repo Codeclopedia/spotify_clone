@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify_clone/model/albumsModel.dart';
 import 'package:spotify_clone/model/artist_info.dart';
 import 'package:spotify_clone/model/categories.dart';
@@ -28,51 +29,138 @@ class dataController extends GetxController {
 
   RxList data_types = ["albums", "episodes", "shows", "tracks"].obs;
 
-  String token  =
-      "BQBL4trq8F_917FFnl_VH237n47uYtNtJVwvuEMd2uHyKH5dtDsrLwqRiMSvc-vitozmZUR_hZqKrYHoWo8s9NcC28-BifK7u-vX2G2bj73TSjJiyehXGSAJWsN5Zh1BFGtoBbj14f1NcoknzpmG7Tdq06bTIFbdunO0La1cd5f5K6Fzb1vrRqxfqTZpz_ZL2JoYWipIX1PNY8vu";
+  String token =
+      "BQC0zkeCm7fAqqg4ZbsLPuFlXa6Q2PgSpXMEIkA4Z_0JFNARITYgTVMmXVb-l06uOgWJLR94v4xAxkSaiAhqzk1AjwjhHns7m48dQgLRxp56Ek3kcN2o_G7xO0DowABhidaJnNOnJb5gGJgOBa_VU7-djbZYSmYSloR55iwMmtpwLHpK1ppSE-TBPfoby43dhPzWL-S4ZUDpxITZpYQ";
 
   Future getLibraryDataModel(linktype) async {
-    var headers = {'Authorization': 'Bearer $token'};
-    var request = http.Request('GET',
-        Uri.parse('https://api.spotify.com/v1/me/${linktype.toString()}'));
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    try {
+      print("inside try");
+      var headers = {'Authorization': 'Bearer $token'};
+      var request = http.Request('GET',
+          Uri.parse('https://api.spotify.com/v1/me/${linktype.toString()}'));
 
-    request.headers.addAll(headers);
+      request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
+      http.StreamedResponse response = await request.send();
+      print("inside try 2");
 
-    if (response.statusCode == 200) {
-      var body = await response.stream.bytesToString();
+      if (response.statusCode == 200) {
+        var body = await response.stream.bytesToString();
+        switch (linktype) {
+          case "albums":
+            {
+              albums = albumsModelFromJson(body);
+              var data = albums;
+              sharedPreferencesinstance.setString(
+                  "albumsData", jsonEncode(data));
+            }
+            break;
+          case "tracks":
+            {
+              tracks = tracksModelFromJson(body);
+              var data = tracks;
+              sharedPreferencesinstance.setString(
+                  "tracksData", jsonEncode(data));
+            }
+            break;
+          case "episodes":
+            {
+              episodes = episodesModelFromJson(body);
+              var data = episodes;
+              sharedPreferencesinstance.setString(
+                  "episodesData", jsonEncode(data));
+            }
+            break;
+          default:
+            {
+              shows = showsModelFromJson(body);
+              var data = shows;
+              sharedPreferencesinstance.setString(
+                  "showsData", jsonEncode(data));
+            }
+            break;
+        }
+        print("inside try 3");
+      } else {
+        print(response.reasonPhrase);
+      }
+    } catch (e) {
+      print("on error: ");
       switch (linktype) {
         case "albums":
           {
-            albums = albumsModelFromJson(body);
+            getalbumofflinedata();
           }
           break;
         case "tracks":
           {
-            tracks = tracksModelFromJson(body);
+            gettrackofflinedata();
           }
           break;
         case "episodes":
           {
-            episodes = episodeModelFromJson(body);
+            getepisodeofflinedata();
           }
           break;
         default:
           {
-            shows = showsModelFromJson(body);
+            getshowsofflinedata();
           }
           break;
       }
-    } else {
-      print(response.reasonPhrase);
     }
   }
 
-  librarydata() {
+  librarydata() async {
     for (int i = 0; i < data_types.length; i++) {
-      getLibraryDataModel(data_types[i]);
+      await getLibraryDataModel(data_types[i]);
     }
+    if (albums.isNull) {
+      getalbumofflinedata();
+    }
+    if (tracks.isNull) {
+      gettrackofflinedata();
+    }
+    if (episodes.isNull) {
+      getepisodeofflinedata();
+    }
+    if (shows.isNull) {
+      getshowsofflinedata();
+    }
+  }
+
+  getalbumofflinedata() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var data = sharedPreferencesinstance.getString("albumsdata");
+    albums = albumsModelFromJson(data!);
+    print("sharedPreferencesinstance data of albums is $albums");
+  }
+
+  gettrackofflinedata() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var data = sharedPreferencesinstance.getString("tracksdata");
+    tracks = tracksModelFromJson(data!);
+    print("sharedPreferencesinstance data of tracks is $tracks");
+  }
+
+  getepisodeofflinedata() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var data = sharedPreferencesinstance.getString("episodesdata");
+    episodes = episodesModelFromJson(data!);
+    print("sharedPreferencesinstance data of episodes is $episodes");
+  }
+
+  getshowsofflinedata() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var data = sharedPreferencesinstance.getString("showsdata");
+    shows = showsModelFromJson(data!);
+    print("sharedPreferencesinstance data of shows is $shows");
   }
 
   Future datarequest() async {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/service/dataController.dart';
 
 class LibraryPage extends StatefulWidget {
@@ -170,50 +171,56 @@ class _LibraryPageState extends State<LibraryPage> {
       case "albums":
         {
           return ListView.builder(
-            itemCount: controller.albums?.items.length,
+            itemCount:
+                controller.albums.isNull ? 10 : controller.albums?.items.length,
             shrinkWrap: true,
-            physics: const ScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * 0.01),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.1,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        child: CachedNetworkImage(
-                          imageUrl: controller
-                              .albums!.items[index].album.images[0].url,
-                          fit: BoxFit.cover,
+              Widget widget = controller.albums.isNull
+                  ? listshimmerbox()
+                  : Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.height * 0.01),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.1,
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              child: CachedNetworkImage(
+                                imageUrl: controller
+                                    .albums!.items[index].album.images[0].url,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.05),
+                                child: Text(
+                                  controller.albums!.items[index].album.name,
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05),
-                          child: Text(
-                            controller.albums!.items[index].album.name,
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                            style: GoogleFonts.poppins(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+                    );
+              return widget;
             },
           );
         }
@@ -221,50 +228,56 @@ class _LibraryPageState extends State<LibraryPage> {
       case "tracks":
         {
           return ListView.builder(
-            itemCount: controller.tracks?.items.length,
+            itemCount:
+                controller.tracks.isNull ? 10 : controller.tracks?.items.length,
             shrinkWrap: true,
-            physics: const ScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * 0.01),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.1,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        child: CachedNetworkImage(
-                          imageUrl: controller
-                              .tracks!.items[index].track.album.images[0].url,
-                          fit: BoxFit.cover,
+              Widget widget = controller.tracks.isNull
+                  ? listshimmerbox()
+                  : Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.height * 0.01),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.1,
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              child: CachedNetworkImage(
+                                imageUrl: controller.tracks!.items[index].track
+                                    .album.images[0].url,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.05),
+                                child: Text(
+                                  controller.tracks!.items[index].track.name,
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05),
-                          child: Text(
-                            controller.tracks!.items[index].track.name,
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                            style: GoogleFonts.poppins(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+                    );
+              return widget;
             },
           );
         }
@@ -272,50 +285,58 @@ class _LibraryPageState extends State<LibraryPage> {
       case "episodes":
         {
           return ListView.builder(
-            itemCount: controller.episodes?.items.length,
+            itemCount: controller.episodes.isNull
+                ? 10
+                : controller.episodes?.items.length,
             shrinkWrap: true,
-            physics: const ScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * 0.01),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.1,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        child: CachedNetworkImage(
-                          imageUrl: controller.episodes!.items[index].episode
-                              .album.images[0].url,
-                          fit: BoxFit.cover,
+              Widget widget = controller.episodes.isNull
+                  ? listshimmerbox()
+                  : Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.height * 0.01),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.1,
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              child: CachedNetworkImage(
+                                imageUrl: controller.episodes!.items[index]
+                                    .episode.album.images[0].url,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.05),
+                                child: Text(
+                                  controller
+                                      .episodes!.items[index].episode.name,
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.05),
-                          child: Text(
-                            controller.episodes!.items[index].episode.name,
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                            style: GoogleFonts.poppins(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+                    );
+              return widget;
             },
           );
         }
@@ -335,8 +356,10 @@ class _LibraryPageState extends State<LibraryPage> {
         {
           return GridView.builder(
               shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemCount: controller.albums?.items.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.albums.isNull
+                  ? 10
+                  : controller.albums?.items.length,
               scrollDirection: Axis.vertical,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -344,35 +367,39 @@ class _LibraryPageState extends State<LibraryPage> {
                   mainAxisSpacing: MediaQuery.of(context).size.height * 0.01,
                   crossAxisSpacing: MediaQuery.of(context).size.width * 0.03),
               itemBuilder: (context, index) {
-                return Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                  child: Stack(
-                    children: [
-                      CachedNetworkImage(
-                          imageUrl: controller
-                              .albums!.items[index].album.images[0].url),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.05),
-                        child: Center(
-                          child: Text(
-                            controller.albums!.items[index].album.name,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                            style: GoogleFonts.poppins(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
+                Widget widget = controller.albums.isNull
+                    ? gridshimmerbox()
+                    : Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Stack(
+                          children: [
+                            CachedNetworkImage(
+                                imageUrl: controller
+                                    .albums!.items[index].album.images[0].url),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: Center(
+                                child: Text(
+                                  controller.albums!.items[index].album.name,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                );
+                      );
+                return widget;
               });
         }
 
@@ -380,8 +407,10 @@ class _LibraryPageState extends State<LibraryPage> {
         {
           return GridView.builder(
               shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemCount: controller.tracks?.items.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.tracks.isNull
+                  ? 10
+                  : controller.tracks?.items.length,
               scrollDirection: Axis.vertical,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -389,44 +418,48 @@ class _LibraryPageState extends State<LibraryPage> {
                   mainAxisSpacing: MediaQuery.of(context).size.height * 0.01,
                   crossAxisSpacing: MediaQuery.of(context).size.width * 0.03),
               itemBuilder: (context, index) {
-                return Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                  child: Stack(
-                    children: [
-                      CachedNetworkImage(
-                        imageUrl: controller
-                            .tracks!.items[index].track.album.images[0].url,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.05),
-                        child: Center(
-                          child: Text(
-                            controller.tracks!.items[index].track.name,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                            style: GoogleFonts.poppins(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: [
-                                const Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                  offset: Offset(5.0, 5.0),
-                                ),
-                              ],
+                Widget widget = controller.tracks.isNull
+                    ? gridshimmerbox()
+                    : Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Stack(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: controller.tracks!.items[index].track
+                                  .album.images[0].url,
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: Center(
+                                child: Text(
+                                  controller.tracks!.items[index].track.name,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    shadows: [
+                                      const Shadow(
+                                        blurRadius: 10.0,
+                                        color: Colors.black,
+                                        offset: Offset(5.0, 5.0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                );
+                      );
+                return widget;
               });
         }
 
@@ -434,8 +467,10 @@ class _LibraryPageState extends State<LibraryPage> {
         {
           return GridView.builder(
               shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemCount: controller.episodes?.items.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.episodes.isNull
+                  ? 10
+                  : controller.episodes?.items.length,
               scrollDirection: Axis.vertical,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -443,45 +478,77 @@ class _LibraryPageState extends State<LibraryPage> {
                   mainAxisSpacing: MediaQuery.of(context).size.height * 0.01,
                   crossAxisSpacing: MediaQuery.of(context).size.width * 0.03),
               itemBuilder: (context, index) {
-                return Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                  child: Stack(
-                    children: [
-                      CachedNetworkImage(
-                        imageUrl: controller
-                            .episodes!.items[index].episode.album.images[0].url,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.05),
-                        child: Center(
-                          child: Text(
-                            controller.episodes!.items[index].episode.name,
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.04,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
+                Widget widget = controller.episodes.isNull
+                    ? gridshimmerbox()
+                    : Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Stack(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: controller.episodes!.items[index]
+                                  .episode.album.images[0].url,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: Center(
+                                child: Text(
+                                  controller
+                                      .episodes!.items[index].episode.name,
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.poppins(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                );
+                      );
+                return widget;
               });
         }
 
       default:
         {
-          print("shows");
+          print("shows on library page");
         }
         break;
     }
     return Container();
+  }
+
+  Widget listshimmerbox() {
+    return Padding(
+        padding: EdgeInsets.symmetric(
+            vertical: MediaQuery.of(context).size.height * 0.01),
+        child: Shimmer.fromColors(
+          highlightColor: Color.fromARGB(255, 71, 71, 71),
+          baseColor: const Color.fromARGB(127, 58, 58, 58),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width * 0.1,
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(5)),
+          ),
+        ));
+  }
+
+  Widget gridshimmerbox() {
+    return Shimmer.fromColors(
+      highlightColor: Color.fromARGB(255, 71, 71, 71),
+      baseColor: const Color.fromARGB(127, 58, 58, 58),
+      child: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+      ),
+    );
   }
 }

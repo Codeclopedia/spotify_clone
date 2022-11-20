@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:spotify_clone/myHomePage.dart';
 import 'package:spring/spring.dart';
 
@@ -41,11 +42,30 @@ class _SplashScreenState extends State<SplashScreen> {
       height: double.infinity,
       width: double.infinity,
       color: Colors.black,
-      child: Spring.fadeIn(
-        child: Image.asset(
-          "assets/images/logo.png",
-          scale: 10,
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Spring.fadeIn(
+            child: Image.asset(
+              "assets/images/logo.png",
+              scale: 10,
+            ),
+          ),
+          Padding(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+            child: Spring.fadeIn(
+                delay: Duration(milliseconds: 400),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.1,
+                  child: Lottie.asset(
+                      "assets/lottie/82845-music-sound-equalizer-loader.json",
+                      fit: BoxFit.fitWidth),
+                )),
+          )
+        ],
       ),
     ));
   }

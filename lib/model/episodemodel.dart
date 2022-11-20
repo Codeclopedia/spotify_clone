@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-EpisodeModel6 episodeModelFromJson(String str) =>
+EpisodeModel6 episodesModelFromJson(String str) =>
     EpisodeModel6.fromJson(json.decode(str));
 
 String episodeModelToJson(EpisodeModel6 data) => json.encode(data.toJson());
