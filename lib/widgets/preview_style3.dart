@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:spotify_clone/model/dataModel.dart';
+import 'package:spotify_clone/model/recetlyplayed.dart';
 import 'package:spotify_clone/service/dataController.dart';
 
-class PreviewStyle2 extends StatelessWidget {
+class PreviewStyle3 extends StatelessWidget {
   final String headingTitle;
-  final RxList<Item1> data;
-  PreviewStyle2({super.key, required this.headingTitle, required this.data});
+  final RxList<Item5> data;
+  PreviewStyle3({super.key, required this.headingTitle, required this.data});
   dataController controller = Get.find();
 
   @override
@@ -25,13 +25,13 @@ class PreviewStyle2 extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(
               vertical: MediaQuery.of(context).size.height * 0.02),
-          child: Obx(() => SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
-                child: ListView.builder(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Obx(() => ListView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: data.isEmpty ? 100 : data.length,
                   cacheExtent: 20,
+                  itemCount: data.isEmpty ? 100 : data.length,
                   itemBuilder: (context, index) {
                     Widget widget = data.isEmpty
                         ? Padding(
@@ -39,12 +39,16 @@ class PreviewStyle2 extends StatelessWidget {
                                 horizontal:
                                     MediaQuery.of(context).size.width * 0.02),
                             child: Shimmer.fromColors(
-                              highlightColor: Color.fromARGB(255, 71, 71, 71),
+                              highlightColor:
+                                  const Color.fromARGB(255, 71, 71, 71),
                               baseColor: const Color.fromARGB(127, 58, 58, 58),
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius:
-                                    MediaQuery.of(context).size.width * 0.15,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5)),
                               ),
                             ),
                           )
@@ -60,27 +64,26 @@ class PreviewStyle2 extends StatelessWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    FutureBuilder<String>(
-                                        future: controller.getIdArtistImage(
-                                            data[index].artists[0].id),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return CircleAvatar(
-                                              backgroundImage:
-                                                  CachedNetworkImageProvider(
-                                                      snapshot.data!),
-                                              radius: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.15,
-                                            );
-                                          }
-                                          return const CircularProgressIndicator();
-                                        }),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      child: CachedNetworkImage(
+                                        imageUrl: data[index]
+                                                .track
+                                                .album
+                                                .images[0]
+                                                .url ??
+                                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                     Expanded(
                                       child: Center(
                                         child: Text(
-                                          data[index].artists[0].name,
+                                          data[index].track.name,
                                           overflow: TextOverflow.fade,
                                           maxLines: 3,
                                           style: GoogleFonts.poppins(
@@ -101,8 +104,8 @@ class PreviewStyle2 extends StatelessWidget {
 
                     return widget;
                   },
-                ),
-              )),
+                )),
+          ),
         ),
       ],
     );

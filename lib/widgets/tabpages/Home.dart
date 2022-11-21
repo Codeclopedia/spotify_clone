@@ -5,6 +5,7 @@ import 'package:spotify_clone/service/dataController.dart';
 import 'package:spotify_clone/widgets/homeIcons.dart';
 import 'package:spotify_clone/widgets/lastalbums.dart';
 import 'package:spotify_clone/widgets/preview_Style2.dart';
+import 'package:spotify_clone/widgets/preview_style3.dart';
 import 'package:spotify_clone/widgets/previewstyle1.dart';
 
 class Home extends StatelessWidget {
@@ -44,9 +45,9 @@ class Home extends StatelessWidget {
             // PreviewStyle1(
             //     headingTitle: "Albums",
             //     data: controller.playlistdata?.playlists.items),
-            // PreviewStyle1(
-            //     headingTitle: "Recently played",
-            //     data: controller.recentlyPlayed5data),
+            PreviewStyle3(
+                headingTitle: "Recently played",
+                data: controller.recentlyPlayed5data!),
             PreviewStyle2(
               headingTitle: "Your Favorite Artist",
               data: controller.items,

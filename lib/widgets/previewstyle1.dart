@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/model/dataModel.dart';
 import 'package:spotify_clone/model/tracksModel.dart';
+import 'package:spotify_clone/widgets/trackpage.dart';
 
 class PreviewStyle1 extends StatelessWidget {
   final String headingTitle;
@@ -39,7 +40,7 @@ class PreviewStyle1 extends StatelessWidget {
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.02),
                         child: Shimmer.fromColors(
-                          highlightColor: Color.fromARGB(255, 71, 71, 71),
+                          highlightColor: const Color.fromARGB(255, 71, 71, 71),
                           baseColor: const Color.fromARGB(127, 58, 58, 58),
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.2,
@@ -54,41 +55,46 @@ class PreviewStyle1 extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.02),
-                        child: Center(
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.15,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  child: CachedNetworkImage(
-                                    imageUrl: data[index].images[0].url ??
-                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      data[index].name,
-                                      overflow: TextOverflow.fade,
-                                      maxLines: 3,
-                                      style: GoogleFonts.poppins(
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.025,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(() => TracksPage(data: data[index]));
+                          },
+                          child: Center(
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.15,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    child: CachedNetworkImage(
+                                      imageUrl: data[index].images[0].url ??
+                                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        data[index].name,
+                                        overflow: TextOverflow.fade,
+                                        maxLines: 3,
+                                        style: GoogleFonts.poppins(
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.025,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

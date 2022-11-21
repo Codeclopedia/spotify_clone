@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotify_clone/service/dataController.dart';
 import 'package:spotify_clone/widgets/homeIcons.dart';
+import 'package:spotify_clone/widgets/trackpage.dart';
 
 class LastAlbum extends StatelessWidget {
   LastAlbum({super.key});
@@ -48,39 +49,46 @@ class LastAlbum extends StatelessWidget {
                     ),
                   ),
                 )
-              : Obx(() => Container(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    decoration: BoxDecoration(
-                        color: const Color.fromARGB(127, 58, 58, 58),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          width: MediaQuery.of(context).size.width * 0.15,
-                          child: CachedNetworkImage(
-                            imageUrl: controller.items[index].images[0].url,
-                            fit: BoxFit.cover,
+              : Obx(() => InkWell(
+                    onTap: () {
+                      Get.to(() => TracksPage(
+                            data: controller.items[index],
+                          ));
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      width: MediaQuery.of(context).size.width * 0.1,
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(127, 58, 58, 58),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: MediaQuery.of(context).size.width * 0.15,
+                            child: CachedNetworkImage(
+                              imageUrl: controller.items[index].images[0].url,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.02,
-                        ),
-                        Expanded(
-                          child: Text(
-                            controller.items[index].name,
-                            overflow: TextOverflow.fade,
-                            maxLines: 2,
-                            style: GoogleFonts.poppins(
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.032,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.02,
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Text(
+                              controller.items[index].name,
+                              overflow: TextOverflow.fade,
+                              maxLines: 2,
+                              style: GoogleFonts.poppins(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.032,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ));
           return widget;

@@ -85,7 +85,7 @@ class SearchPage extends StatelessWidget {
                   ),
                 ),
                 Obx(() {
-                  return controller.categories.value.categories.href.isNotEmpty
+                  return controller.categories!.value.categories.href.isNotEmpty
                       ? SliverGrid(
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -101,11 +101,11 @@ class SearchPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(5)),
                                 child: Stack(children: [
                                   Obx(() {
-                                    return controller.categories.value
+                                    return controller.categories!.value
                                             .categories.href.isNotEmpty
                                         ? CachedNetworkImage(
                                             imageUrl: controller
-                                                .categories
+                                                .categories!
                                                 .value
                                                 .categories
                                                 .items[index]
@@ -119,10 +119,10 @@ class SearchPage extends StatelessWidget {
                                     left: MediaQuery.of(context).size.width *
                                         00.01,
                                     child: Obx(() {
-                                      return controller.categories.value
+                                      return controller.categories!.value
                                               .categories.href.isNotEmpty
                                           ? Text(
-                                              controller.categories.value
+                                              controller.categories!.value
                                                   .categories.items[index].name,
                                               style: GoogleFonts.poppins(
                                                   fontSize:
@@ -140,12 +140,31 @@ class SearchPage extends StatelessWidget {
                               );
                             },
                             childCount: controller
-                                .categories.value.categories.items.length,
+                                .categories!.value.categories.items.length,
                           ),
                         )
-                      : const SliverToBoxAdapter(
+                      : SliverToBoxAdapter(
                           child: Center(
-                              child: CircularProgressIndicator.adaptive()));
+                              child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator.adaptive(),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.04),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: const Text(
+                                  "Something is wrong with server. We are working on it. Try again later",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            )
+                          ],
+                        )));
                 }),
                 SliverToBoxAdapter(
                   child: SizedBox(

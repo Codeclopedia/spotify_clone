@@ -2,10 +2,12 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify_clone/model/albumsModel.dart';
+import 'package:spotify_clone/model/albumtracks.dart';
 import 'package:spotify_clone/model/artist_info.dart';
 import 'package:spotify_clone/model/categories.dart';
 import 'package:spotify_clone/model/dataModel.dart';
@@ -18,25 +20,27 @@ import 'package:spotify_clone/model/tracksModel.dart';
 class dataController extends GetxController {
   Albums? data;
   Categories1? _data;
-  // Playlists? playlistdata;
+
+  Playlists? playlistdata;
   RxList<Item1> items = <Item1>[].obs;
   RxList<Item5>? recentlyPlayed5data = <Item5>[].obs;
-  Rx<BrowseCategories> categories = BrowseCategories.empty().obs;
+  Rx<BrowseCategories>? categories;
   AlbumsModel? albums;
   TracksModel? tracks;
   EpisodeModel6? episodes;
   ShowsModel? shows;
+  Albumstracks? albumtracks;
+  RxList<ArtistInformation> relatedartist = <ArtistInformation>[].obs;
 
   RxList data_types = ["albums", "episodes", "shows", "tracks"].obs;
 
   String token =
-      "BQC0zkeCm7fAqqg4ZbsLPuFlXa6Q2PgSpXMEIkA4Z_0JFNARITYgTVMmXVb-l06uOgWJLR94v4xAxkSaiAhqzk1AjwjhHns7m48dQgLRxp56Ek3kcN2o_G7xO0DowABhidaJnNOnJb5gGJgOBa_VU7-djbZYSmYSloR55iwMmtpwLHpK1ppSE-TBPfoby43dhPzWL-S4ZUDpxITZpYQ";
+      "BQDV7I4Bb3RvWHvCnRrJQxRSlKlzGeNJkqIJGXgRlbPUwGwIYCCtQVunV64GaAQsKXEJvk17YovaP7ODe3ar0bPZ6NS-fLRafXMhG-4eawIJ5ojjfOnC1ye_9c5Ni8Dm_7KBiRosuUlO1X-KDLfnXEl3bO7Q-JFlV0dMMO31PPKkoQLZx1HqXBGvD5t30PzhW3nly-xa-L0-CMLG";
 
   Future getLibraryDataModel(linktype) async {
     SharedPreferences sharedPreferencesinstance =
         await SharedPreferences.getInstance();
     try {
-      print("inside try");
       var headers = {'Authorization': 'Bearer $token'};
       var request = http.Request('GET',
           Uri.parse('https://api.spotify.com/v1/me/${linktype.toString()}'));
@@ -44,7 +48,6 @@ class dataController extends GetxController {
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
-      print("inside try 2");
 
       if (response.statusCode == 200) {
         var body = await response.stream.bytesToString();
@@ -82,12 +85,10 @@ class dataController extends GetxController {
             }
             break;
         }
-        print("inside try 3");
       } else {
-        print(response.reasonPhrase);
+        print("getLibraryDataModel" + response.reasonPhrase.toString());
       }
     } catch (e) {
-      print("on error: ");
       switch (linktype) {
         case "albums":
           {
@@ -181,22 +182,27 @@ class dataController extends GetxController {
         items.add(element);
       });
     } else {
-      await Future.delayed(Duration(seconds: 1));
-      data.isNull ? getdataoffline() : null;
+      print("datarequest" + response.reasonPhrase.toString());
     }
+    await Future.delayed(Duration(seconds: 1));
+    data.isNull ? getdataoffline() : null;
   }
 
   getdataoffline() async {
     SharedPreferences sharedPreferencesinstance =
         await SharedPreferences.getInstance();
     var localdata = sharedPreferencesinstance.getString("dataAlbumsData");
-    data = jsonDecode(localdata!);
+
+    data = Albums.fromJson(jsonDecode(localdata!));
     data?.items.forEach((element) {
       items.add(element);
     });
   }
 
   Future<String> getIdArtistImage(String artistId) async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+
     var headers = {'Authorization': 'Bearer $token'};
     var request = http.Request('GET',
         Uri.parse('https://api.spotify.com/v1/artists/${artistId.toString()}'));
@@ -208,15 +214,24 @@ class dataController extends GetxController {
     if (response.statusCode == 200) {
       var body = await response.stream.bytesToString();
       ArtistInformation information = artistInformationFromJson(body);
+      sharedPreferencesinstance.setString(
+          "${artistId}information", jsonEncode(information));
 
       return information.images[0].url;
     } else {
-      print(response.reasonPhrase);
+      print("getIdArtistImage" + response.reasonPhrase.toString());
     }
-    return "";
+    var localdata =
+        sharedPreferencesinstance.getString("${artistId}information");
+    var data = ArtistInformation.fromJson(jsonDecode(localdata!));
+
+    return data.images[0].url;
   }
 
   Future getcategories() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+
     var headers = {'Authorization': 'Bearer $token'};
     var request = http.Request(
         'GET', Uri.parse('https://api.spotify.com/v1/browse/categories'));
@@ -227,13 +242,25 @@ class dataController extends GetxController {
 
     if (response.statusCode == 200) {
       var body = await response.stream.bytesToString();
-      categories.value = browseCategoriesFromJson(body);
+      categories = browseCategoriesFromJson(body).obs;
+      var data = categories;
+      sharedPreferencesinstance.setString("categoriesData", jsonEncode(data));
     } else {
-      print(response.reasonPhrase);
+      print(" getcategories " + response.reasonPhrase.toString());
     }
+    categories.isNull ? getcategoriesdataoffline() : print("has data");
+  }
+
+  getcategoriesdataoffline() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var data = sharedPreferencesinstance.getString("categoriesData");
+    categories = browseCategoriesFromJson(data!).obs;
   }
 
   Future recentlyplayed() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
     var headers = {'Authorization': 'Bearer $token'};
     var request = http.Request('GET',
         Uri.parse('https://api.spotify.com/v1/me/player/recently-played'));
@@ -245,36 +272,95 @@ class dataController extends GetxController {
     if (response.statusCode == 200) {
       var body = await response.stream.bytesToString();
       var data = RecentlyPlayed5.fromJson(jsonDecode(body));
-
-      print(data);
       data.items.forEach(
         (element) {
           recentlyPlayed5data!.add(element);
         },
       );
+      sharedPreferencesinstance.setString(
+          "recentlyPlayed5Data", jsonEncode(recentlyPlayed5data));
     } else {
-      print(response.reasonPhrase);
+      print("recentlyplayed" + response.reasonPhrase.toString());
     }
+
+    recentlyPlayed5data!.isEmpty ? getrecentlydataoffline() : null;
   }
 
-  // Future getplaylist() async {
-  //   var headers = {'Authorization': 'Bearer $token'};
-  //   var request = http.Request('GET',
-  //       Uri.parse('https://api.spotify.com/v1/browse/featured-playlists'));
+  getrecentlydataoffline() async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var localrecentlydata =
+        sharedPreferencesinstance.getString("recentlyPlayed5Data");
 
-  //   request.headers.addAll(headers);
+    List listofdata = jsonDecode(localrecentlydata!);
+    listofdata.forEach((element) {
+      recentlyPlayed5data!.add(Item5.fromJson(element));
+    });
+  }
 
-  //   http.StreamedResponse response = await request.send();
+  getAlbumstracks(String albumId) async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var headers = {'Authorization': 'Bearer $token'};
+    var request = http.Request(
+        'GET', Uri.parse('https://api.spotify.com/v1/albums/$albumId/tracks'));
 
-  //   if (response.statusCode == 200) {
-  //     print(response.stream.bytesToString());
-  //     var body = await response.stream.bytesToString();
-  //     playlistdata = playlistsFromJson(body);
-  //     print(playlistdata);
-  //   } else {
-  //     print(response.reasonPhrase);
-  //   }
-  // }
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var body = await response.stream.bytesToString();
+      albumtracks = albumstracksFromJson(body);
+      var data = albumtracks;
+      sharedPreferencesinstance.setString(
+          "${albumId}tracksData", albumstracksToJson(data!));
+      return albumtracks;
+    } else {
+      print("getAlbumstracks" + response.reasonPhrase.toString());
+    }
+    var localdata = sharedPreferencesinstance.getString("${albumId}tracksData");
+    Albumstracks data = albumstracksFromJson(localdata!);
+    albumtracks = data;
+    return albumtracks;
+  }
+
+  getrelatedartists(String artistid) async {
+    SharedPreferences sharedPreferencesinstance =
+        await SharedPreferences.getInstance();
+    var headers = {'Authorization': 'Bearer $token'};
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://api.spotify.com/v1/artists/$artistid/related-artists'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      relatedartist.clear();
+      var data = await response.stream.bytesToString();
+      var newdata = jsonDecode(data);
+
+      newdata["artists"].forEach((element) {
+        relatedartist.add(ArtistInformation.fromJson(element));
+      });
+
+      sharedPreferencesinstance.setString(
+          "${artistid}relatedArtistData", jsonEncode(relatedartist));
+    } else {
+      print("relatedartists" + response.reasonPhrase.toString());
+    }
+    var localdata =
+        sharedPreferencesinstance.getString("${artistid}relatedArtistData");
+    List data = jsonDecode(localdata!);
+    relatedartist.clear();
+    data.forEach((element) {
+      relatedartist.add(ArtistInformation.fromJson(element));
+    });
+    return relatedartist;
+  }
 
   getdata() async {
     await datarequest();
