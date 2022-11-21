@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             padding:
                 EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
             child: Spring.fadeIn(
-                delay: Duration(milliseconds: 400),
+                delay: Duration(seconds: 1),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.1,
                   width: MediaQuery.of(context).size.width * 0.1,

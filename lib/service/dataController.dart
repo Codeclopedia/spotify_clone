@@ -35,7 +35,7 @@ class dataController extends GetxController {
   RxList data_types = ["albums", "episodes", "shows", "tracks"].obs;
 
   String token =
-      "BQDV7I4Bb3RvWHvCnRrJQxRSlKlzGeNJkqIJGXgRlbPUwGwIYCCtQVunV64GaAQsKXEJvk17YovaP7ODe3ar0bPZ6NS-fLRafXMhG-4eawIJ5ojjfOnC1ye_9c5Ni8Dm_7KBiRosuUlO1X-KDLfnXEl3bO7Q-JFlV0dMMO31PPKkoQLZx1HqXBGvD5t30PzhW3nly-xa-L0-CMLG";
+      "BQCBbyjzo2q4-hsIvvmnd8VQog_tbHhTY9psDihI4anBgLYU1SIsWYgPiET8_IqeialG8ZlEX0BfRp_t6iLINYV2ZJbrYY3eJJlh4vTYz0fbVFT2_ByAtyk7YACtAnoQqpqgAzWIRmneEKL7Jk1ZWLNxD9CdIipPvAVb6eBatAN8Dn8zOPAErKlD8pKqkWcY8GXZICxfP6o2T05-";
 
   Future getLibraryDataModel(linktype) async {
     SharedPreferences sharedPreferencesinstance =
