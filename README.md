@@ -12,7 +12,7 @@ This is a Flutter Spotify Application which is created using flutter,dart,[Getx]
  [<img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" />](https://github.com/Codeclopedia)
  	
 
-##APP VISUALS
+ ## APP VISUALS
 
 https://user-images.githubusercontent.com/88575762/203795024-750e16cf-2e83-4f7d-a03a-5be903200909.mp4
  
