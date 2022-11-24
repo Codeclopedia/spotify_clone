@@ -13,6 +13,7 @@ This is a Flutter Spotify Application which is created using flutter,dart,[Getx]
  	
 
 ##APP VISUALS
+
 https://user-images.githubusercontent.com/88575762/203795024-750e16cf-2e83-4f7d-a03a-5be903200909.mp4
  
  ## Dependencies Used
